@@ -1,0 +1,12 @@
+-- 001_init.sql
+-- ENUMs:    category_kind ('live','static'), media_type ('image','video')
+-- TABLES:   categories  (id, parent_id, kind, name, slug, description, position,
+--                        artwork_count, is_active, created_at)
+--                        CHECK: parent => kind NOT NULL, root => kind NULL
+--           artworks    (id, category_id, title, media_type, is_premium,
+--                        storage_key, thumb_key, preview_key, original_filename,
+--                        color_code, width, height, bytes, is_active, created_at)
+-- INDEXES:  ix_cat_parents   (position, id)                WHERE parent_id IS NULL AND is_active
+--           ix_cat_children  (parent_id, position, id)     WHERE is_active
+--           ix_art_feed      (created_at DESC, id DESC)    WHERE is_active
+--           ix_art_cat       (category_id, created_at DESC, id DESC) WHERE is_active

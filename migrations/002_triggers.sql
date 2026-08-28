@@ -1,0 +1,5 @@
+-- 002_triggers.sql
+-- trg_artwork_count   : keep categories.artwork_count in sync on artwork
+--                       INSERT / UPDATE(category_id, is_active) / DELETE,
+--                       bumping both the leaf and its parent
+-- trg_leaf_only       : reject artworks.category_id pointing at a root category
