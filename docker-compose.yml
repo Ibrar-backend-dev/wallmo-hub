@@ -6,7 +6,9 @@ services:
       POSTGRES_PASSWORD: wallmo
       POSTGRES_DB: wallmo
     ports:
-      - "5432:5432"
+      # 5432 on the host is often taken by a local Postgres install;
+      # override with DB_PORT if 5433 is busy too.
+      - "${DB_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

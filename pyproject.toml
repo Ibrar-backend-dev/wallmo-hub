@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Wallpaper catalog API - FastAPI + Postgres + B2"
 requires-python = ">=3.10"
 dependencies = [
-    "fastapi>=0.115",
+    "fastapi>=0.141",
     "uvicorn[standard]>=0.32",
     "asyncpg>=0.30",
     "pydantic>=2.9",
@@ -13,11 +13,10 @@ dependencies = [
     "aioboto3>=13.2",
     "pillow>=11.0",
     "python-multipart>=0.0.17",
-    "structlog>=24.4",
-    "slowapi>=0.1.9",
 ]
 
 [project.optional-dependencies]
+sentry = ["sentry-sdk>=2.18"]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
@@ -26,12 +25,34 @@ dev = [
     "mypy>=1.13",
 ]
 
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# Explicit: the repo has app/, scripts/ and tests/ at the top level, and
+# setuptools refuses to guess between them.
+packages = ["app", "app.routers"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's whole dependency-injection design puts these calls in argument
+# defaults, so B008 is a false positive for them and only for them.
+extend-immutable-calls = [
+    "fastapi.Body",
+    "fastapi.Depends",
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Header",
+    "fastapi.Path",
+    "fastapi.Query",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
